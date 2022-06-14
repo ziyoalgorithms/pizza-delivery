@@ -19,8 +19,8 @@ class Order(models.Model):
         ('IN_TRANSIT', 'inTransit'),
         ('DELIVERED', 'delivered')
     )
-
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, default=SIZES[0][0])
     size = models.CharField(max_length=20, choices=SIZES)
     order_status = models.CharField(max_length=20, choices=ORDER_STATUS, default=ORDER_STATUS[0][0])
     quantity = models.PositiveIntegerField(default=1)
