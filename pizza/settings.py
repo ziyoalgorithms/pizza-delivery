@@ -1,10 +1,12 @@
 from pathlib import Path
-from datetime import timedelta
 from decouple import config
 import dj_database_url
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -14,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast=bool)
+DEBUG = config('DEBUG',cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
@@ -28,50 +30,37 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'orders.apps.OrdersConfig',
+    'authentication.apps.AuthConfig',
 
     'rest_framework',
-    'phonenumber_field',
-    'djoser',
     'drf_yasg',
+    'djoser',
 
-
-    'authentication',
-    'orders',
 ]
 
+AUTH_USER_MODEL ='authentication.User'
 
-
-SWAGGER_SETTINGS = {
-   'SECURITY_DEFINITIONS': {
-      'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-      }
-   }
-}
-
-
-
-AUTH_USER_MODEL = 'authentication.User'
-
-REST_FRAMEWORK = {
-    "NON_FIELD_ERRORS_KEY": "errors",
-    "DEFAULT_AUTHENTICATION_CLASSES": (
+REST_FRAMEWORK={
+    "NON_FIELD_ERRORS_KEY":"error",
+    "DEFAULT_AUTHENTICATION_CLASSES":(
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+        )
 }
-
-
-
 SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('Bearer', ),
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'BLACKLIST_AFTER_ROTATION': False,
+   'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+
+SWAGGER_SETTINGS={
+    'SECURITY_DEFINITIONS':{
+        'Bearer':{
+            'type':'apiKey',
+            'in':'header',
+            'name':'Authorization'
+        }
+    }
+}
 
 
 
@@ -83,7 +72,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',]
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
+]
 
 ROOT_URLCONF = 'pizza.urls'
 
@@ -103,18 +94,22 @@ TEMPLATES = [
     },
 ]
 
+
+
+
 WSGI_APPLICATION = 'pizza.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {}
+DATABASES={}
 
 if DEBUG:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    DATABASES["default"]={
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+
     }
 else:
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
@@ -158,10 +153,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT=BASE_DIR / 'staticfiles/'
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage" 
-
-
+STATIC_ROOT=BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
