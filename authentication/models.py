@@ -14,7 +14,7 @@ class CustomUserManager(BaseUserManager):
 
         email = self.normalize_email(email)
 
-        new_user = self.modle(email=email, **extra_fields)
+        new_user = self.model(email=email, **extra_fields)
 
         new_user.set_password(password)
 
